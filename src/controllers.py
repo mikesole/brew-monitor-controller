@@ -4,6 +4,9 @@ import time
 # temperature sensor library
 from w1thermsensor import W1ThermSensor
 
+# power switch
+from gpiozero import Energenie
+
 
 """
     Controls brew temperature and pushes data REST api
@@ -52,10 +55,10 @@ class TemperatureController(object):
             # control heater
             if temp_celsius > max_heater_thresh:
                 # turn heater off
-                pass
+                Energenie(1, initial_value=False)
             else:
                 # turn heater on
-                pass
+                Energenie(1, initial_value=True)
                 
             # sleep 
             time.sleep(sample_rate)

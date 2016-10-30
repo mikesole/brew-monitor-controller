@@ -1,0 +1,7 @@
+# Eclipse Core
+.project
+
+# Eclipse pydev project
+.pydevproject
+
+*.pyc

@@ -41,8 +41,11 @@ class TemperatureController(object):
 
         while True:
 
+	    print("reading temp ...")
+
             # sample temperature
             temp_celsius = self._temp_sensor.get_temperature()
+	    print("temp:", temp_celsius)
 
             # push reading to REST api
             try:
@@ -59,7 +62,9 @@ class TemperatureController(object):
             else:
                 # turn heater on
                 Energenie(1, initial_value=True)
-                
+
+            print("sleeping...")
+
             # sleep 
             time.sleep(sample_rate)
             

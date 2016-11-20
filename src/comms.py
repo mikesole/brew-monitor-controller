@@ -28,6 +28,8 @@ class SensorWebComms(object):
 
         r = requests.post(post_url, data = auth)
 
+	print(" get token status code: ", r.status_code)
+
         return r.json()["id"]
 
     """

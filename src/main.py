@@ -17,7 +17,7 @@ if __name__ == "__main__":
     sample_rate = int(sys.argv[3])
     max_heater_thresh = int(sys.argv[4])
     
-    target_api_url = "http://www.brew.mikesole.co.uk/api/"
+    target_api_url = "https://www.brew.mikesole.co.uk/api/"
     
     login_decl = "Users/login"
     post_data_decl = "SensorReadings"

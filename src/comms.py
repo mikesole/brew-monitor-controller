@@ -28,26 +28,30 @@ class SensorWebComms(object):
 
         r = requests.post(post_url, data = auth)
 
-	print(" get token status code: ", r.status_code)
+        print(" get token status code: ", r.status_code)
 
         return r.json()["id"]
 
     """
         Post sensor reading
     """
-    def postSensorReading(self, temp):
+    def postSensorReading(self, temp_readings):
 
         token = self.getAuthToken()
     
-        timestamp = str(datetime.datetime.now().isoformat())
+        for temp_reading in temp_readings:
 
-        payload = {"sensor-id": '0', "value": str(temp), "timestamp": timestamp, "id": timestamp}
+            timestamp = str(datetime.datetime.now().isoformat())
 
-        post_url = "".join([self._target_api_url, self._post_data_decl, "?access_token=", token])
+            id = str(temp_reading[0])
+            value = str(temp_reading[1])
+            
+            payload = {"sensor-id": id, "value": value, "timestamp": timestamp, "id": timestamp}
 
-        r = requests.post(post_url, json=payload)
+            post_url = "".join([self._target_api_url, self._post_data_decl, "?access_token=", token])
 
-        print("".join([" data: ", timestamp, " ", str(temp)]))
-        print(" status code: ", r.status_code)
-        print(r.json())
-	print("\n")
+            r = requests.post(post_url, json=payload)
+
+            print(" status code: ", r.status_code)
+            print(r.json())
+            print("\n")

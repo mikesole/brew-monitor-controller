@@ -9,7 +9,7 @@ from gpiozero import Energenie
 
 
 """
-    Controls brew temperature and pushes data REST api
+    Controls brew temperature and pushes data to REST api
 """
 class TemperatureController(object):
 
@@ -41,15 +41,22 @@ class TemperatureController(object):
 
         while True:
 
-	    print("reading temp ...")
+            print("reading temp ...")
 
-            # sample temperature
-            temp_celsius = self._temp_sensor.get_temperature()
-	    print("temp:", temp_celsius)
+            temp_celsius = 0
 
-            # push reading to REST api
+            # collect temperature readings from sensors and set the maximum
+            # temperature as the current temperature
+            temp_readings = []
+            for sensor in W1ThermSensor.get_available_sensors():
+                temp = sensor.get_temperature()
+                id = hash(sensor.id)
+                temp_readings.append((id, temp))
+                temp_celsius = max(temp_celsius, temp)
+            
+            # push readings to REST api
             try:
-                self._web_comms.postSensorReading(temp_celsius)
+                self._web_comms.postSensorReading(temp_readings)
             except Exception as e:
                 # catch all exceptions from web communications so 
                 # that the temperature controller is not interrupted
@@ -63,6 +70,9 @@ class TemperatureController(object):
                 # turn heater on
                 Energenie(1, initial_value=True)
 
+            print("readings:")
+            for reading in temp_readings:
+                print("\t" + str(reading))
             print("sleeping...")
 
             # sleep 
